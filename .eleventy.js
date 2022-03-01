@@ -3,6 +3,7 @@ const { DateTime } = require("luxon");
 const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 const htmlmin = require("html-minifier");
 const pluginRss = require("@11ty/eleventy-plugin-rss");
+const pluginNavigation = require("@11ty/eleventy-navigation");
 
 module.exports = function (eleventyConfig) {
   // Disable automatic use of your .gitignore
@@ -17,6 +18,8 @@ module.exports = function (eleventyConfig) {
       "dd LLL yyyy"
     );
   });
+
+  eleventyConfig.addPlugin(pluginNavigation);
 
   // Syntax Highlighting for Code blocks
   eleventyConfig.addPlugin(syntaxHighlight);
@@ -55,6 +58,21 @@ module.exports = function (eleventyConfig) {
   });
 
   eleventyConfig.addPlugin(pluginRss);
+
+  function filterTagList(tags) {
+    return (tags || []).filter(tag => ["all", "nav", "post", "posts"].indexOf(tag) === -1);
+  }
+
+  eleventyConfig.addFilter("filterTagList", filterTagList)
+
+  eleventyConfig.addCollection("tagList", function(collection) {
+    let tagSet = new Set();
+    collection.getAll().forEach(item => {
+      (item.data.tags || []).forEach(tag => tagSet.add(tag));
+    });
+
+    return filterTagList([...tagSet]);
+  });
 
   // Let Eleventy transform HTML files as nunjucks
   // So that we can use .html instead of .njk

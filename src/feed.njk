@@ -1,43 +1,32 @@
----json
-{
-  "permalink": "feed.xml",
-  "eleventyExcludeFromCollections": true,
-  "metadata": {
-    "title": "The Aztec Temple",
-    "subtitle": "web3, code, mexico. some assembly required.",
-    "url": "https://bowtiedaztec.com/",
-    "feedUrl": "https://bowtiedaztec.com/feed.xml",
-    "author": {
-      "name": "BowTiedAztec",
-      "email": "bowtiedaztec@tutanota.com"
-    }
-  }
-}
+---
+# Metadata comes from _data/metadata.json
+permalink: "{{ metadata.feed.path }}"
+eleventyExcludeFromCollections: true
 ---
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>{{ metadata.title }}</title>
-  <subtitle>{{ metadata.subtitle }}</subtitle>
-  <link href="{{ metadata.feedUrl }}" rel="self"/>
-  <link href="{{ metadata.url }}"/>
-  <updated>{{ collections.all | getNewestCollectionItemDate | dateToRfc3339 }}</updated>
-  <id>{{ metadata.url }}</id>
-  <author>
-    <name>{{ metadata.author.name }}</name>
-    <email>{{ metadata.author.email }}</email>
-  </author>
-  {%- for post in collections.all %}
-  {% set absolutePostUrl %}{{ post.url | url | absoluteUrl(metadata.url) }}{% endset %}
-  <entry>
+	<title>{{ metadata.title }}</title>
+	<subtitle>{{ metadata.feed.subtitle }}</subtitle>
+	{% set absoluteUrl %}{{ metadata.feed.path | url | absoluteUrl(metadata.url) }}{% endset %}
+	<link href="{{ absoluteUrl }}" rel="self"/>
+	<link href="{{ metadata.url }}"/>
+	<updated>{{ collections.post | rssLastUpdatedDate }}</updated>
+	<id>{{ metadata.feed.id }}</id>
+	<author>
+		<name>{{ metadata.author.name }}</name>
+	</author>
+	{%- for post in collections.post | reverse %}
+	{% set absolutePostUrl %}{{ post.url | url | absoluteUrl(metadata.url) }}{% endset %}
+	<entry>
     {%- for tag in post.data.tags %}
     <category term="{{ tag }}" label="{{ tag }}" />
     {%- endfor %}
-    <title>{{ post.data.title }}</title>
+		<title>{{ post.data.title }}</title>
     <summary>{{ post.data.description }}</summary>
-    <link href="{{ absolutePostUrl }}"/>
-    <updated>{{ post.date | dateToRfc3339 }}</updated>
-    <id>{{ absolutePostUrl }}</id>
-    <content type="html"><![CDATA[{{ post.templateContent | htmlToAbsoluteUrls(absolutePostUrl) }}]]></content>
-  </entry>
-  {%- endfor %}
+		<link href="{{ absolutePostUrl }}"/>
+		<updated>{{ post.date | rssDate }}</updated>
+		<id>{{ absolutePostUrl }}</id>
+		<content type="html">{{ post.templateContent | htmlToAbsoluteUrls(absolutePostUrl) }}</content>
+	</entry>
+	{%- endfor %}
 </feed>

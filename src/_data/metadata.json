@@ -1,0 +1,16 @@
+{
+    "title": "The Aztec Temple",
+    "url": "https://bowtiedaztec.com/",
+    "language": "en",
+    "description": "web3, code, mexico. some assembly required.",
+    "feed": {
+      "subtitle": "web3, code, mexico. some assembly required.",
+      "filename": "feed.xml",
+      "path": "/feed.xml",
+      "id": "https://bowtiedaztec.com/"
+    },
+    "author": {
+      "name": "BowTiedAztec",
+      "url": "https://bowtiedaztec.com"
+    }
+  }
