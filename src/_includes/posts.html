@@ -13,6 +13,12 @@ prism: true
 
             </time>
         </p>
+        <p class="text-center text-base leading-6 font-medium text-gray-500">
+            Tags: 
+            {% for tag in tags %}
+            <a href="/tags/{{ tag }}">#{{ tag }}</a>
+            {% endfor %}
+        </p>
     </div>
     <iframe
     scrolling="no"

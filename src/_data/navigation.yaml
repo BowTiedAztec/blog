@@ -2,3 +2,5 @@
 items:
   - text: Blog Archive
     url: "/blog"
+  - text: Categories
+    url: "/tags"

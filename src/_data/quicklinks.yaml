@@ -5,3 +5,6 @@ links:
   - title: Archive
     url: /blog
     desc: All of the posts
+  - title: Categories
+    url: /tags
+    desc: Posts by category
